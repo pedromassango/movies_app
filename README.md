@@ -1,6 +1,6 @@
-# movies
+# Challenge - Movie App
 
-Code Challenge
+A movie app challenge. The data comes from The Movie Database.
 
 ## Getting Started
 
