@@ -1,13 +1,14 @@
 import 'package:bloc/bloc.dart';
+import 'package:movies/src/application/cubit_state.dart';
+import 'package:movies/src/domain/movies/movie.dart';
 import 'package:movies/src/domain/movies/movies_repository.dart';
 
-class FavoriteMoviesState {}
-
-class FavoriteMoviesCubit extends Cubit<FavoriteMoviesState> {
+class FavoriteMoviesCubit extends Cubit<CubitState<List<Movie>, FavoriteMoviesLoadingResult>> {
   FavoriteMoviesCubit({
-    required FavoriteMoviesState initialState,
     required this.moviesRepository,
-  }) : super(initialState);
+  }) : super(CubitState.initialState());
 
   final MoviesRepository moviesRepository;
 }
+
+enum FavoriteMoviesLoadingResult { noData }
