@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movies/src/application/movies/favorite_movies/favorite_movies_cubit.dart';
+import 'package:movies/src/application/movies/movies_cubit.dart';
+import 'package:movies/src/dependency_injection/dependency_injection.dart';
+import 'package:movies/src/domain/movies/movies_repository.dart';
 import 'package:movies/src/presentation/home_page/tabs/favourites_tab/favourites_tab.dart';
 import 'package:movies/src/presentation/home_page/tabs/movies_tab/movies_tab.dart';
 
@@ -13,6 +18,10 @@ class _HomePageState extends State<HomePage> {
 
   late final PageController _pageController = PageController();
 
+  MoviesRepository getMoviesRepository() {
+    return getIt.get<MoviesRepository>();
+  }
+
   @override
   void dispose() {
     _pageController.dispose();
@@ -22,16 +31,35 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PageView(
-        controller: _pageController,
-        physics: NeverScrollableScrollPhysics(),
-        onPageChanged: (index) {
-          setState(() => _currentTabIndex = index);
-        },
-        children: [
-          MoviesTab(),
-          FavouritesTab(),
+      backgroundColor: Color(0xFF22272e),
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        title: Text('Movies', style: TextStyle(
+          fontSize: 24,
+        ),),
+        actions: [
+          IconButton(icon: Icon(Icons.search_sharp), onPressed: () {})
         ],
+      ),
+      body: SafeArea(
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (_) => MoviesCubit(moviesRepository: getMoviesRepository()),),
+            BlocProvider(create: (_) => FavoriteMoviesCubit(moviesRepository: getMoviesRepository()),),
+          ],
+          child: PageView(
+            controller: _pageController,
+            physics: NeverScrollableScrollPhysics(),
+            onPageChanged: (index) {
+              setState(() => _currentTabIndex = index);
+            },
+            children: [
+              MoviesTab(),
+              FavouritesTab(),
+            ],
+          ),
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: false,
