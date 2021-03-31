@@ -53,10 +53,10 @@ class _MoviesTabState extends State<MoviesTab>
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+          padding: const EdgeInsets.fromLTRB(16, 16, 32, 12),
           child: Row(
             children: [
-              Text('All Movies', style: Theme.of(context).textTheme.subtitle2!.copyWith(
+              Text('Trending', style: Theme.of(context).textTheme.subtitle2!.copyWith(
                 color: Colors.white54,
               ),),
               Spacer(),
