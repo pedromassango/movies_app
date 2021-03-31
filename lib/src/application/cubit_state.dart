@@ -12,11 +12,11 @@ class CubitState<TData, TError> {
     required this.data,
   });
 
-  factory CubitState.initialState([bool isLoading = false]) {
+  factory CubitState.initialState({bool isLoading = false, TData? data}) {
     return CubitState(
         isLoading: isLoading,
         error: null,
-        data: null,
+        data: data,
     );
   }
 
