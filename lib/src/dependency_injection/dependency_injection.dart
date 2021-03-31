@@ -2,6 +2,7 @@
 
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:movies/src/domain/movies/movies_repository.dart';
 import 'package:movies/src/infrastructure/movies/movies_repository_base.dart';
 import 'package:movies/src/infrastructure/movies/movies_service.dart';
 
@@ -27,7 +28,7 @@ class DependencyInjection {
   }
 
   void registerRepositories() {
-    getIt.registerFactory(() => MoviesRepositoryBase(getIt.get<MoviesService>()));
+    getIt.registerFactory<MoviesRepository>(() => MoviesRepositoryBase(getIt.get<MoviesService>()));
   }
 
   static void setup({required Dio dio}) {
