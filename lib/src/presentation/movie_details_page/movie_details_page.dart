@@ -221,7 +221,7 @@ class _CompaniesSection extends StatelessWidget {
                   shape: BoxShape.circle,
                 ),
                 child: Image.network(item.logoImageUrl,
-                  errorBuilder: (_, __, ___) => Icon(Icons.fireplace_sharp),
+                  errorBuilder: (_, __, ___) => Icon(Icons.broken_image_rounded),
                 ),
               );
             },
