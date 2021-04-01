@@ -61,18 +61,16 @@ class _MoviesTabState extends State<MoviesTab>
                 color: Colors.white54,
               ),),
               Spacer(),
-              DropdownButtonHideUnderline(
-                child: DropdownButton<SortMode>(
-                  icon: Icon(Icons.sort_sharp, color: Colors.white54,),
-                  onTap: () {},
-                  onChanged: (mode) => context.read<MoviesCubit>().sortMovies(mode!),
-                  items: SortMode.values.map((mode) {
-                    return DropdownMenuItem(
-                      value: mode,
-                      child: Text(getSortModeName(mode)),
-                    );
-                  }).toList(),
-                ),
+              PopupMenuButton<SortMode>(
+                offset: Offset(0, -50),
+                icon: Icon(Icons.sort_sharp, color: Colors.white54,),
+                onSelected: (mode) => context.read<MoviesCubit>().sortMovies(mode),
+                itemBuilder: (context) => SortMode.values.map((mode) {
+                  return PopupMenuItem(
+                    value: mode,
+                    child: Text(getSortModeName(mode)),
+                  );
+                }).toList(),
               ),
             ],
           ),
