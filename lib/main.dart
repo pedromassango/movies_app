@@ -23,6 +23,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Movie App',
+      theme: ThemeData.light().copyWith(
+        scaffoldBackgroundColor: Color(0xFF22272e),
+    ),
       home: HomePage(),
     );
   }

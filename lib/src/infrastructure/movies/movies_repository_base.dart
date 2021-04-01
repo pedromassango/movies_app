@@ -21,10 +21,22 @@ class MoviesRepositoryBase extends MoviesRepository {
     return Tuple2<PagedMoviesResult?, MovieLoadingError?>(null, result.item2);
   }
 
-  Future<Tuple2<PagedMoviesResult?, MovieLoadingError?>> getMoviesFromService([int page = 0]) async {
-    //TODO(pedromassango): Implement offline-first strategy
-    //TODO(pedromassango): 1- Load data from local database
+  @override
+  Future<Tuple2<List<Movie>?, MovieLoadingError?>> searchMoviesByTitle({required String query}) async {
+    final result = await moviesService.getMoviesByTitle(query: query);
+    if (result.item1 != null) {
+      final response = result.item1!;
+      final pagedResult = PagedMoviesResult(
+        movies: response.results.map<Movie>((item) => item.getMovie()).toList(),
+        currentPage: response.page,
+        maxPage: response.totalPages,
+      );
+      return Tuple2<List<Movie>?, MovieLoadingError?>(pagedResult.movies, null);
+    }
+    return Tuple2(null, result.item2);
+  }
 
+  Future<Tuple2<PagedMoviesResult?, MovieLoadingError?>> getMoviesFromService([int page = 0]) async {
     final result = await moviesService.getMovies(page: page);
     if (result.item1 != null) {
       final response = result.item1!;

@@ -28,13 +28,13 @@ class MovieListSortStrategy {
 
   static List<Movie> sortMoviesByDateAscending(List<Movie> movies) {
     return List.from(movies)..sort((Movie a, Movie b) {
-      return SortingStrategy.sortDateInAscendingOrder(b.releaseDate, a.releaseDate);
+      return SortingStrategy.sortDateInAscendingOrder(b.getReleaseDateNonNullable(), a.getReleaseDateNonNullable());
     });
   }
 
   static List<Movie> sortMoviesByDateDescending(List<Movie> movies) {
     return List.from(movies)..sort((Movie a, Movie b) {
-      return SortingStrategy.sortDateInDescendingOrder(b.releaseDate, a.releaseDate);
+      return SortingStrategy.sortDateInDescendingOrder(b.getReleaseDateNonNullable(), a.getReleaseDateNonNullable());
     });
   }
 }
