@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:movies/src/domain/movies/movie.dart';
 import 'package:movies/src/infrastructure/movies/mappers.dart';
 
-MoviesResponse moviesResponseFromMap(String str) => MoviesResponse.fromMap(json.decode(str));
+MoviesResponse moviesResponseFromMap(String str) => MoviesResponse.fromJson(json.decode(str));
 
 class MoviesResponse {
   MoviesResponse({
@@ -18,7 +18,7 @@ class MoviesResponse {
   final int totalPages;
   final int totalResults;
 
-  factory MoviesResponse.fromMap(Map<String, dynamic> json) => MoviesResponse(
+  factory MoviesResponse.fromJson(Map<String, dynamic> json) => MoviesResponse(
     page: json["page"],
     results: List<MovieResponseItem>.from(json["results"].map((x) => MovieResponseItem.fromMap(x))),
     totalPages: json["total_pages"],
