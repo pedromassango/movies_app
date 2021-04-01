@@ -37,6 +37,12 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
     final bgColor = Theme.of(context).scaffoldBackgroundColor;
 
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        automaticallyImplyLeading: true,
+      ),
+      extendBodyBehindAppBar: true,
       body: Stack(
         clipBehavior: Clip.none,
         children: [
