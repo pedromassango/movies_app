@@ -5,6 +5,7 @@ import 'package:movies/src/domain/movies/genre.dart';
 class Movie {
   final String id;
   final String title;
+  final String overview;
   final String posterImageUrl;
   final String backdropImageUrl;
   final List<Genre> genres;
@@ -14,6 +15,7 @@ class Movie {
   Movie({
     required this.id,
     required this.title,
+    required this.overview,
     required this.posterImageUrl,
     required this.backdropImageUrl,
     required this.genres,
@@ -58,6 +60,7 @@ class Movie {
           backdropImageUrl == other.backdropImageUrl &&
           genres == other.genres &&
           releaseDate == other.releaseDate &&
+          overview == other.overview &&
           rating == other.rating;
 
   @override
@@ -68,5 +71,6 @@ class Movie {
       backdropImageUrl.hashCode^
       genres.hashCode^
       releaseDate.hashCode^
+      overview.hashCode^
       rating.hashCode;
 }

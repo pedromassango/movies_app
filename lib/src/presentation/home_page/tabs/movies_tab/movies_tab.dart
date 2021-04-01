@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies/src/application/movies/movies_cubit.dart';
 import 'package:movies/src/domain/movies/movie_loading_error.dart';
 import 'package:movies/src/presentation/home_page/widgets/movie_list_item.dart';
+import 'package:movies/src/presentation/movie_details_page/movie_details_page.dart';
 
 class MoviesTab extends StatefulWidget {
   @override
@@ -92,7 +93,13 @@ class _MoviesTabState extends State<MoviesTab>
                 physics: BouncingScrollPhysics(),
                 itemBuilder: (context, index) {
                   final movie = movies[index];
-                  return MovieListItem(movie);
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (_) => MovieDetailsPage(movie: movie)
+                      ));
+                    },
+                      child: MovieListItem(movie));
                 },
               );
             },

@@ -7,6 +7,7 @@ import 'package:movies/src/infrastructure/movies/reponse_objects/movies_response
 Movie mapMovieResponseItemToMovie(MovieResponseItem movieResponseItem) {
   return Movie(
     id: movieResponseItem.id.toString(),
+    overview: movieResponseItem.overview ?? 'N/A',
     title: movieResponseItem.title ?? movieResponseItem.originalTitle ?? 'N/A',
     rating: movieResponseItem.voteAverage.round(),
     genres: getGenresBy(movieResponseItem.genreIds),
