@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies/src/application/movies/movies_cubit.dart';
 import 'package:movies/src/domain/movies/movie_loading_error.dart';
 import 'package:movies/src/presentation/home_page/widgets/movie_list_item.dart';
+import 'package:movies/src/presentation/movie_details_page/movie_details_page.dart';
 
 class MoviesTab extends StatefulWidget {
   @override
@@ -60,18 +61,16 @@ class _MoviesTabState extends State<MoviesTab>
                 color: Colors.white54,
               ),),
               Spacer(),
-              DropdownButtonHideUnderline(
-                child: DropdownButton<SortMode>(
-                  icon: Icon(Icons.sort_sharp, color: Colors.white54,),
-                  onTap: () {},
-                  onChanged: (mode) => context.read<MoviesCubit>().sortMovies(mode!),
-                  items: SortMode.values.map((mode) {
-                    return DropdownMenuItem(
-                      value: mode,
-                      child: Text(getSortModeName(mode)),
-                    );
-                  }).toList(),
-                ),
+              PopupMenuButton<SortMode>(
+                offset: Offset(0, -50),
+                icon: Icon(Icons.sort_sharp, color: Colors.white54,),
+                onSelected: (mode) => context.read<MoviesCubit>().sortMovies(mode),
+                itemBuilder: (context) => SortMode.values.map((mode) {
+                  return PopupMenuItem(
+                    value: mode,
+                    child: Text(getSortModeName(mode)),
+                  );
+                }).toList(),
               ),
             ],
           ),
@@ -92,7 +91,13 @@ class _MoviesTabState extends State<MoviesTab>
                 physics: BouncingScrollPhysics(),
                 itemBuilder: (context, index) {
                   final movie = movies[index];
-                  return MovieListItem(movie);
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (_) => MovieDetailsPage(movie: movie)
+                      ));
+                    },
+                      child: MovieListItem(movie));
                 },
               );
             },

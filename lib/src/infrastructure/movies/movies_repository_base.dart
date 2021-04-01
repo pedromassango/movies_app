@@ -1,7 +1,9 @@
 import 'package:movies/src/domain/movies/movie.dart';
+import 'package:movies/src/domain/movies/movie_details.dart';
 import 'package:movies/src/domain/movies/movie_loading_error.dart';
 import 'package:movies/src/domain/movies/movies_repository.dart';
 import 'package:movies/src/domain/movies/paged_movies.dart';
+import 'package:movies/src/infrastructure/movies/mappers.dart';
 import 'package:movies/src/infrastructure/movies/movies_service.dart';
 import 'package:tuple/tuple.dart';
 
@@ -34,6 +36,20 @@ class MoviesRepositoryBase extends MoviesRepository {
       return Tuple2<List<Movie>?, MovieLoadingError?>(pagedResult.movies, null);
     }
     return Tuple2(null, result.item2);
+  }
+
+  @override
+  Future<Tuple2<MovieDetails?, MovieLoadingError?>> getMovieDetails({required String movieId}) async {
+    final response = await moviesService.getMovieDetails(movieId: movieId);
+
+    if (response.item1 != null) {
+      final data = mapMovieDetailsResponseItemToMovieDetails(
+        response.item1!,
+        isFavorite: false // check if this is a favorite movie in database
+      );
+      return Tuple2<MovieDetails?, MovieLoadingError?>(data, null);
+    }
+    return Tuple2<MovieDetails?, MovieLoadingError?>(null, response.item2);
   }
 
   Future<Tuple2<PagedMoviesResult?, MovieLoadingError?>> getMoviesFromService([int page = 0]) async {

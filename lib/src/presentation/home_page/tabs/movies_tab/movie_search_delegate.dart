@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies/src/application/movies/movie_search_cubit.dart';
 import 'package:movies/src/domain/movies/movie_loading_error.dart';
 import 'package:movies/src/presentation/home_page/widgets/movie_list_item.dart';
+import 'package:movies/src/presentation/movie_details_page/movie_details_page.dart';
 
 class MovieSearchDelegate extends SearchDelegate {
   MovieSearchDelegate({ required this.movieSearchBloc}): super(
@@ -70,7 +71,14 @@ class MovieSearchDelegate extends SearchDelegate {
             return ListView.builder(
               itemCount: state.movies.length,
               itemBuilder: (context, index) {
-                return MovieListItem(state.movies[index]);
+                final movie = state.movies[index];
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(
+                        builder: (_) => MovieDetailsPage(movie: movie)
+                    ));
+                  },
+                    child: MovieListItem(movie));
               },
             );
           },

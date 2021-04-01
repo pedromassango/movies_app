@@ -32,19 +32,22 @@ class MovieListItem extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               children: [
-                Container(
-                  width: height * .6,
-                  height: height * .9,
-                  margin: const EdgeInsets.only(right: 16, bottom: 4),
-                  decoration: BoxDecoration(
+                Hero(
+                  tag: movie.id,
+                  child: Container(
+                    width: height * .6,
+                    height: height * .9,
+                    margin: const EdgeInsets.only(right: 16, bottom: 4),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: Colors.grey,
+                    ),
+                    child: ClipRRect(
                       borderRadius: BorderRadius.circular(8),
-                      color: Colors.grey,
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.network(movie.backdropImageUrl,
-                      fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) => Center(child: Icon(Icons.movie_sharp, size: 50, color: bgColor),),
+                      child: Image.network(movie.posterImageUrl,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => Center(child: Icon(Icons.movie_sharp, size: 50, color: bgColor),),
+                      ),
                     ),
                   ),
                 ),

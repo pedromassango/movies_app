@@ -4,18 +4,24 @@ class MovieDetails {
   final bool video;
   final String title;
   final String overview;
-  final int popularity;
+  final double voteAverage;
   final String backdropImageUrl;
-  final DateTime releaseDate;
+  final DateTime? releaseDate;
+  final bool isFavorite;
+  final String status;
+  final List<ProductionCompany> companies;
 
   MovieDetails({
     required this.id,
     required this.video,
     required this.title,
     required this.overview,
-    required this.popularity,
+    required this.voteAverage,
     required this.backdropImageUrl,
     required this.releaseDate,
+    required this.isFavorite,
+    required this.status,
+    required this.companies,
   });
 
   @override
@@ -27,8 +33,11 @@ class MovieDetails {
           video == other.video &&
           title == other.title &&
           overview == other.overview &&
-          popularity == other.popularity &&
+          voteAverage == other.voteAverage &&
           backdropImageUrl == other.backdropImageUrl &&
+          isFavorite == other.isFavorite &&
+          status == other.status &&
+          companies == other.companies &&
           releaseDate == other.releaseDate;
 
   @override
@@ -37,7 +46,38 @@ class MovieDetails {
       video.hashCode ^
       title.hashCode ^
       overview.hashCode ^
-      popularity.hashCode ^
+      voteAverage.hashCode ^
+      status.hashCode ^
+      isFavorite.hashCode ^
+      companies.hashCode ^
       backdropImageUrl.hashCode ^
       releaseDate.hashCode;
+}
+
+class ProductionCompany {
+  ProductionCompany({
+    required this.id,
+    required this.logoImageUrl,
+    required this.name,
+    required this.originCountry,
+  });
+
+  final int id;
+  final String logoImageUrl;
+  final String name;
+  final String originCountry;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ProductionCompany &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          logoImageUrl == other.logoImageUrl &&
+          name == other.name &&
+          originCountry == other.originCountry;
+
+  @override
+  int get hashCode =>
+      id.hashCode ^ logoImageUrl.hashCode ^ name.hashCode ^ originCountry.hashCode;
 }
