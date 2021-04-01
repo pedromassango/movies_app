@@ -10,6 +10,7 @@ class MovieListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final bgColor = Theme.of(context).scaffoldBackgroundColor;
 
     final double height = 180;
     final double cardPaddingTop = height * .75;
@@ -38,46 +39,53 @@ class MovieListItem extends StatelessWidget {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
                       color: Colors.grey,
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        onError: (_, __) => Center(child: Icon(Icons.play_arrow, size: 50),),
-                        image: NetworkImage(movie.backdropImageUrl),
-                      )
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.network(movie.backdropImageUrl,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, __, ___) => Center(child: Icon(Icons.movie_sharp, size: 50, color: bgColor),),
+                    ),
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.only(top: cardPaddingTop / 2),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(movie.title, style: textTheme.bodyText1!.copyWith(
-                        color: Colors.white
-                      )),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 12, top: 4),
-                        child: Row(
-                          children: List.generate(10, (index) {
-                            final isInRange = index <= movie.rating;
-                            return Icon(Icons.star,
-                              color: isInRange ? Colors.yellow : Colors.white24,
-                              size: 8.5,
-                            );
-                          }),
-                        ),
-                      ),
-                      if (movie.hasGenres())
-                        Text(
-                          movie.getMinimumGenres().join(' / '),
-                          style: textTheme.caption!.copyWith(
-                            color: Colors.white70,
+                Flexible(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: cardPaddingTop / 2),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(movie.title,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: textTheme.bodyText1!.copyWith(
+                          color: Colors.white
+                        )),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 12, top: 4),
+                          child: Row(
+                            children: List.generate(10, (index) {
+                              final isInRange = index <= movie.rating;
+                              return Icon(Icons.star,
+                                color: isInRange ? Colors.yellow : Colors.white24,
+                                size: 8.5,
+                              );
+                            }),
                           ),
                         ),
-                      Text(movie.getReleaseDate(),
-                          style: textTheme.caption!.copyWith(
-                            color: Colors.white70,
+                        if (movie.hasGenres())
+                          Text(
+                            movie.getMinimumGenres().join(' / '),
+                            style: textTheme.caption!.copyWith(
+                              color: Colors.white70,
+                            ),
                           ),
-                        ),
-                    ],
+                        Text(movie.getFormattedReleaseDate(),
+                            style: textTheme.caption!.copyWith(
+                              color: Colors.white70,
+                            ),
+                          ),
+                      ],
+                    ),
                   ),
                 )
               ],
