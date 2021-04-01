@@ -62,7 +62,7 @@ class FavoriteMovieListItem extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(top: 8),
                       child: Text(
-                        movie.getMinimumGenres().join(' / '),
+                        movie.getGenresAsString(),
                         style: textTheme.caption!.copyWith(
                           color: Colors.white70,
                         ),

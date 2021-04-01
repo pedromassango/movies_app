@@ -1,8 +1,5 @@
 import 'dart:convert';
 
-import 'package:movies/src/domain/movies/movie.dart';
-import 'package:movies/src/infrastructure/movies/mappers.dart';
-
 MoviesResponse moviesResponseFromMap(String str) => MoviesResponse.fromJson(json.decode(str));
 
 class MoviesResponse {
@@ -59,10 +56,6 @@ class MovieResponseItem {
   final DateTime? releaseDate;
   final double voteAverage;
   final double popularity;
-
-  Movie getMovie() {
-    return mapMovieResponseItemToMovie(this);
-  }
 
   factory MovieResponseItem.fromMap(Map<String, dynamic> json) {
     return MovieResponseItem(

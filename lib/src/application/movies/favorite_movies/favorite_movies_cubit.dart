@@ -9,19 +9,23 @@ class FavoriteMoviesCubit extends Cubit<FavoriteMoviesState> {
 
   final MoviesRepository moviesRepository;
 
-  void loadFavoriteMovies() async {
-    /// Loading movies may take a while so
-    /// we need to make sure the UI is in a
-    /// loading state while doing the heavy operation
-    /// of loading movies from the local database.
-    emit(state.copyWith(isLoadingMovies: true));
+  void subscribeToFavoriteMoviesList() async {
+    moviesRepository.watchFavoriteMovies().listen((movies) {
+      emit(state.copyWith(
+        isLoadingMovies: false,
+        movies: movies,
+      ));
+    });
+  }
 
-    final movies = await moviesRepository.getFavoriteMovies();
-
-    emit(state.copyWith(
-      isLoadingMovies: false,
-      movies: movies,
-    ));
+  /// Since we are changing local database only
+  /// there is no need to make this an async task,
+  /// as we are sure that the task will complete
+  /// successfully.
+  Movie changeFavoriteStatus(Movie movie) {
+    final updatedMovie = movie.copyWith(isFavorite: !movie.isFavorite);
+    moviesRepository.updateMovie(updatedMovie);
+    return updatedMovie;
   }
 }
 

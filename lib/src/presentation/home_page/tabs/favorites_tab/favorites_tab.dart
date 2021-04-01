@@ -18,7 +18,7 @@ class _FavouritesTabState extends State<FavoritesTab>
   @override
   void initState() {
     super.initState();
-    context.read<FavoriteMoviesCubit>().loadFavoriteMovies();
+    context.read<FavoriteMoviesCubit>().subscribeToFavoriteMoviesList();
   }
 
   @override

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies/src/application/movies/favorite_movies/favorite_movies_cubit.dart';
+import 'package:movies/src/application/movies/movie_details_cubit.dart';
 import 'package:movies/src/application/movies/movie_search_cubit.dart';
 import 'package:movies/src/application/movies/movies_cubit.dart';
 import 'package:movies/src/dependency_injection/dependency_injection.dart';
@@ -61,22 +62,16 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       body: SafeArea(
-        child: MultiBlocProvider(
-          providers: [
-            BlocProvider(create: (_) => MoviesCubit(moviesRepository: getMoviesRepository()),),
-            BlocProvider(create: (_) => FavoriteMoviesCubit(moviesRepository: getMoviesRepository()),),
+        child: PageView(
+          controller: _pageController,
+          physics: NeverScrollableScrollPhysics(),
+          onPageChanged: (index) {
+            setState(() => _currentTabIndex = index);
+          },
+          children: [
+            MoviesTab(),
+            FavoritesTab(),
           ],
-          child: PageView(
-            controller: _pageController,
-            physics: NeverScrollableScrollPhysics(),
-            onPageChanged: (index) {
-              setState(() => _currentTabIndex = index);
-            },
-            children: [
-              MoviesTab(),
-              FavoritesTab(),
-            ],
-          ),
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(

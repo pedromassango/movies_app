@@ -24,6 +24,18 @@ class MovieDetailsCubit extends Cubit<MovieDetailsState> {
     ));
   }
 
+  void updateMovieState(Movie movie) {
+    if (state.hasError) {
+      return;
+    }
+
+    emit(state.copyWith(
+      movieDetails: state.movieDetails!.copyWith(
+        movie: movie,
+      )
+    ));
+  }
+
 }
 
 class MovieDetailsState {

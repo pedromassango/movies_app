@@ -77,7 +77,7 @@ class MovieListItem extends StatelessWidget {
                         ),
                         if (movie.hasGenres())
                           Text(
-                            movie.getMinimumGenres().join(' / '),
+                            movie.getGenresAsString(),
                             style: textTheme.caption!.copyWith(
                               color: Colors.white70,
                             ),

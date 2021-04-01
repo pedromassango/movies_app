@@ -3,6 +3,8 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:movies/src/domain/movies/movies_repository.dart';
+import 'package:movies/src/infrastructure/movies/local_movies_datasource.dart';
+import 'package:movies/src/infrastructure/movies/movies_database/movies_database.dart';
 import 'package:movies/src/infrastructure/movies/movies_repository_base.dart';
 import 'package:movies/src/infrastructure/movies/movies_service.dart';
 
@@ -28,7 +30,14 @@ class DependencyInjection {
   }
 
   void registerRepositories() {
-    getIt.registerFactory<MoviesRepository>(() => MoviesRepositoryBase(getIt.get<MoviesService>()));
+    final moviesDatabase = MoviesDatabase();
+    final moviesLocalDatasource = MoviesLocalDatasource(moviesDatabase);
+    getIt.registerFactory<MoviesRepository>(
+      () => MoviesRepositoryBase(
+        getIt.get<MoviesService>(),
+        moviesLocalDatasource,
+      ),
+    );
   }
 
   static void setup({required Dio dio}) {
