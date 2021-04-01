@@ -15,7 +15,7 @@ class MoviesRepositoryBase extends MoviesRepository {
     //TODO(pedromassango): Implement offline-first strategy
     //TODO(pedromassango): 1- Load data from local database first
 
-    final result = await getMoviesFromService();
+    final result = await getMoviesFromMoviesService();
     if (result.item1 != null) {
       //TODO(pedromassango): save data locally
       return result;
@@ -52,7 +52,13 @@ class MoviesRepositoryBase extends MoviesRepository {
     return Tuple2<MovieDetails?, MovieLoadingError?>(null, response.item2);
   }
 
-  Future<Tuple2<PagedMoviesResult?, MovieLoadingError?>> getMoviesFromService([int page = 0]) async {
+  @override
+  Future<List<Movie>> getFavoriteMovies() async {
+    //TODO(pedromassango): load movies from database
+    return [];
+  }
+
+  Future<Tuple2<PagedMoviesResult?, MovieLoadingError?>> getMoviesFromMoviesService([int page = 0]) async {
     final result = await moviesService.getMovies(page: page);
     if (result.item1 != null) {
       final response = result.item1!;

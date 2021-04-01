@@ -15,6 +15,8 @@ abstract class MoviesRepository {
 
   Future<Tuple2<PagedMoviesResult?, MovieLoadingError?>> getMovies({required int page});
 
+  Future<List<Movie>> getFavoriteMovies();
+
   Future<Tuple2<MovieDetails?, MovieLoadingError?>> getMovieDetails({required String movieId});
 
   Future<Tuple2<List<Movie>?, MovieLoadingError?>> searchMoviesByTitle({required String query});
