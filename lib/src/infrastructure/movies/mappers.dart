@@ -7,12 +7,12 @@ import 'package:movies/src/infrastructure/movies/reponse_objects/movies_response
 Movie mapMovieResponseItemToMovie(MovieResponseItem movieResponseItem) {
   return Movie(
     id: movieResponseItem.id.toString(),
-    title: movieResponseItem.title,
+    title: movieResponseItem.title ?? movieResponseItem.originalTitle ?? 'N/A',
     rating: movieResponseItem.voteAverage.round(),
     genres: getGenresBy(movieResponseItem.genreIds),
     releaseDate: movieResponseItem.releaseDate,
     backdropImageUrl: IMAGE_URL + (movieResponseItem.backdropPath ?? ''),
-    posterImageUrl: IMAGE_URL + movieResponseItem.posterPath,
+    posterImageUrl: IMAGE_URL + (movieResponseItem.posterPath ?? ''),
   );
 }
 

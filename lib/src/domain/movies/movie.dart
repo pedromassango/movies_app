@@ -9,7 +9,7 @@ class Movie {
   final String backdropImageUrl;
   final List<Genre> genres;
   final int rating;
-  final DateTime releaseDate;
+  final DateTime? releaseDate;
 
   Movie({
     required this.id,
@@ -21,8 +21,18 @@ class Movie {
     required this.releaseDate,
   });
 
-  String getReleaseDate() {
-    return DateFormat.yMMMMd().format(releaseDate);
+  /// Hack to provide a "reliable" (non-nullable)
+  /// date to the comparator function because some Movies just does not give
+  /// us the release date.
+  DateTime getReleaseDateNonNullable() {
+    return releaseDate ?? DateTime.now();
+  }
+
+  String getFormattedReleaseDate() {
+    if (releaseDate == null) {
+      return 'N/A';
+    }
+    return DateFormat.yMMMMd().format(releaseDate!);
   }
 
   bool hasGenres() => genres.isNotEmpty;

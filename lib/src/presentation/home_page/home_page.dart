@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies/src/application/movies/favorite_movies/favorite_movies_cubit.dart';
+import 'package:movies/src/application/movies/movie_search_cubit.dart';
 import 'package:movies/src/application/movies/movies_cubit.dart';
 import 'package:movies/src/dependency_injection/dependency_injection.dart';
-import 'package:movies/src/domain/movies/movie.dart';
 import 'package:movies/src/domain/movies/movies_repository.dart';
 import 'package:movies/src/presentation/home_page/tabs/movies_tab/movies_tab.dart';
 
 import 'tabs/favorites_tab/favorites_tab.dart';
+import 'tabs/movies_tab/movie_search_delegate.dart';
 
 class HomePage extends StatefulWidget {
 
@@ -33,7 +34,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF22272e),
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
@@ -41,7 +41,23 @@ class _HomePageState extends State<HomePage> {
           fontSize: 32,
         ),),
         actions: [
-          IconButton(icon: Icon(Icons.search_sharp), onPressed: () {})
+          Builder(
+            builder: (context) {
+              return IconButton(
+                  icon: Icon(Icons.search_sharp),
+                  onPressed: () {
+                    showSearch(
+                        context: context,
+                        delegate: MovieSearchDelegate(
+                          movieSearchBloc: MovieSearchBloc(
+                            moviesRepository: getMoviesRepository()
+                          )
+                        ),
+                    );
+                  },
+              );
+            },
+          )
         ],
       ),
       body: SafeArea(

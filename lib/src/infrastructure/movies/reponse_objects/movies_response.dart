@@ -45,16 +45,18 @@ class MovieResponseItem {
     required this.releaseDate,
     required this.voteAverage,
     required this.popularity,
+    required this.originalTitle,
   });
 
   final String? backdropPath;
   final List<int> genreIds;
   final int id;
-  final String posterPath;
+  final String? posterPath;
   final bool video;
-  final String title;
-  final String overview;
-  final DateTime releaseDate;
+  final String? title;
+  final String? originalTitle;
+  final String? overview;
+  final DateTime? releaseDate;
   final double voteAverage;
   final double popularity;
 
@@ -62,18 +64,21 @@ class MovieResponseItem {
     return mapMovieResponseItemToMovie(this);
   }
 
-  factory MovieResponseItem.fromMap(Map<String, dynamic> json) => MovieResponseItem(
+  factory MovieResponseItem.fromMap(Map<String, dynamic> json) {
+    return MovieResponseItem(
     backdropPath: json["backdrop_path"] == null ? null : json["backdrop_path"],
     genreIds: List<int>.from(json["genre_ids"].map((x) => x)),
     id: json["id"],
     posterPath: json["poster_path"],
     video: json["video"],
     title: json["title"],
+    originalTitle: json["original_title"],
     overview: json["overview"],
-    releaseDate: DateTime.parse(json["release_date"]),
+    releaseDate: DateTime.tryParse(json["release_date"]),
     voteAverage: json["vote_average"].toDouble(),
     popularity: json["popularity"].toDouble(),
   );
+  }
 
   Map<String, dynamic> toMap() => {
     "backdrop_path": backdropPath == null ? null : backdropPath,
@@ -83,7 +88,6 @@ class MovieResponseItem {
     "video": video,
     "title": title,
     "overview": overview,
-    "release_date": "${releaseDate.year.toString().padLeft(4, '0')}-${releaseDate.month.toString().padLeft(2, '0')}-${releaseDate.day.toString().padLeft(2, '0')}",
     "vote_average": voteAverage,
     "popularity": popularity,
   };

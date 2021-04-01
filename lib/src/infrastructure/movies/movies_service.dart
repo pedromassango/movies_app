@@ -31,4 +31,25 @@ class MoviesService {
     }
   }
 
+  Future<Tuple2<MoviesResponse?, MovieLoadingError?>> getMoviesByTitle({required String query}) async {
+    try {
+      final result = await dio.get('/search/movie?api_key=$apiKey&query=$query');
+      final response = MoviesResponse.fromMap(result.data);
+      return Tuple2(response, null);
+    } catch (e) {
+      MovieLoadingError error = MovieLoadingError.internetError;
+      if (e is DioError && e.response != null) {
+        switch(e.response!.statusCode) {
+          case 401:
+            error = MovieLoadingError.unauthorizedAccess;
+            break;
+          case 404:
+            error = MovieLoadingError.serverError;
+            break;
+        }
+      }
+      return Tuple2(null, error);
+    }
+  }
+
 }
