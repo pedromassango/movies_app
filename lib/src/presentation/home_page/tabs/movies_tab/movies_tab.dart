@@ -36,7 +36,7 @@ class _MoviesTabState extends State<MoviesTab>
       case SortMode.dateAsc:
         return 'Sort by Date Asc';
       case SortMode.dateDesc:
-        return 'Sort by Name Desc';
+        return 'Sort by Date Desc';
     }
   }
 
