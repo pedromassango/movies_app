@@ -80,7 +80,7 @@ void main() {
   });
 }
 
-Movie _createFakeMovie({DateTime? releaseDate, int index = 0, String title = ''}) {
+Movie _createFakeMovie({DateTime? releaseDate, String title = ''}) {
   final effectiveReleaseDate = releaseDate ?? DateTime.now();
   return Movie(
     id: effectiveReleaseDate.toIso8601String(),
