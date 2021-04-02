@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies/src/application/movies/favorite_movies/favorite_movies_cubit.dart';
+import 'package:movies/src/domain/movies/movie.dart';
 import 'package:movies/src/presentation/home_page/widgets/favorite_movie_list_item.dart';
 import 'package:movies/src/presentation/movie_details_page/movie_details_page.dart';
 
@@ -14,6 +15,16 @@ class _FavouritesTabState extends State<FavoritesTab>
 
   @override
   bool get wantKeepAlive => true;
+
+  void _onItemDismissed(BuildContext context, Movie movie) {
+    context.read<FavoriteMoviesCubit>().changeFavoriteStatus(movie);
+
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        backgroundColor: Colors.white,
+        content: Text('Movie removed from favorites.',
+        style: TextStyle(color: Colors.black),)),
+    );
+  }
 
   @override
   void initState() {
@@ -44,13 +55,27 @@ class _FavouritesTabState extends State<FavoritesTab>
                 itemBuilder: (context, index) {
                   final movie = state.movies[index];
 
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.push(context, MaterialPageRoute(
-                        builder: (_) => MovieDetailsPage(movie: movie)
-                      ));
-                    },
-                      child: FavoriteMovieListItem(movie));
+                  return Dismissible(
+                    key: ObjectKey(movie),
+                    direction: DismissDirection.endToStart,
+                    onDismissed: (_) => _onItemDismissed(context, movie),
+                    background: Container(
+                      alignment: Alignment.centerRight,
+                      margin: EdgeInsets.only(right: 32),
+                      child: Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                        size: 50,
+                      ),
+                    ),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(context, MaterialPageRoute(
+                          builder: (_) => MovieDetailsPage(movie: movie)
+                        ));
+                      },
+                        child: FavoriteMovieListItem(movie)),
+                  );
                 },
               ),
             ),

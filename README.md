@@ -10,7 +10,9 @@ A movie app challenge. The data comes from The Movie Database.
 ## Considerations
 
 1. All the requirements are met.
-2. I've done so many things to demonstrate the DDD architecture
+2. It is possible to remove items from favorites by swiping from
+   right-to-left in the favorites tab.
+3. I've done so many things to demonstrate the DDD architecture
    since the time is limited, I was not able to meet all the requirements.
 
 3. There is a known bug: when you navigate to detail page from  movies
