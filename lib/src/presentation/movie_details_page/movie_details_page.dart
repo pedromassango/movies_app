@@ -32,144 +32,159 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
     );
     final bgColor = Theme.of(context).scaffoldBackgroundColor;
 
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        automaticallyImplyLeading: true,
-      ),
-      extendBodyBehindAppBar: true,
-      body: Stack(
-        children: [
-          Hero(
-            tag: widget.movie.id,
-            child: Container(
-              width: size.width,
-              height: imageHeight,
-              foregroundDecoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.bottomCenter,
-                  end: Alignment.topCenter,
-                  stops: [.1, .4, .55],
-                  colors: [
-                    bgColor.withOpacity(1),
-                    bgColor.withOpacity(.7),
-                    bgColor.withOpacity(.2),
-                  ]
+    return WillPopScope(
+      onWillPop: () async {
+        context.read<MovieDetailsCubit>().close();
+        return true;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          automaticallyImplyLeading: true,
+        ),
+        extendBodyBehindAppBar: true,
+        body: Stack(
+          children: [
+            Hero(
+              tag: widget.movie.id,
+              child: Container(
+                width: size.width,
+                height: imageHeight,
+                foregroundDecoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
+                    stops: [.1, .4, .55],
+                    colors: [
+                      bgColor.withOpacity(1),
+                      bgColor.withOpacity(.7),
+                      bgColor.withOpacity(.2),
+                    ]
+                  ),
+                ),
+                child: Image.network(widget.movie.posterImageUrl,
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, __, ___) => Center(child: Icon(Icons.movie_sharp, size: 50, color: Colors.white70),),
                 ),
               ),
-              child: Image.network(widget.movie.posterImageUrl,
-                fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Center(child: Icon(Icons.movie_sharp, size: 50, color: Colors.white70),),
-              ),
             ),
-          ),
-          Align(
-            alignment: Alignment(0, 1),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: SizedBox(
-                height: imageHeight * .8,
-                child: ListView(
-                  padding: EdgeInsets.only(bottom: 32),
-                  physics: BouncingScrollPhysics(),
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 54),
-                          child: Text(widget.movie.title, style: textTheme.headline5!.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w900
-                          ),),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8, bottom: 24),
-                          child: Text(widget.movie.getFormattedReleaseDate(),
-                            style: textTheme.headline6!.copyWith(
-                                color: Colors.white60,
-                                fontWeight: FontWeight.w800,
+            Align(
+              alignment: Alignment(0, 1),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: SizedBox(
+                  height: imageHeight * .8,
+                  child: ListView(
+                    padding: EdgeInsets.only(bottom: 32),
+                    physics: BouncingScrollPhysics(),
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(right: 54),
+                            child: Text(widget.movie.title, style: textTheme.headline5!.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w900
+                            ),),
                           ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8, bottom: 24),
+                            child: Text(widget.movie.getFormattedReleaseDate(),
+                              style: textTheme.headline6!.copyWith(
+                                  color: Colors.white60,
+                                  fontWeight: FontWeight.w800,
+                            ),
+                            ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 8),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              BlocBuilder<MovieDetailsCubit, MovieDetailsState>(
-                                builder: (context, state) {
-                                  final status = state.hasData ? state.movieDetails!.status : 'Loading...';
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                                    child: _Section(
-                                      header: 'Status',
-                                      horizontalAlignment: CrossAxisAlignment.center,
-                                      child: Text(status),
-                                    ),
-                                  );
-                                },
-                              ),
-                              BlocBuilder<MovieDetailsCubit, MovieDetailsState>(
-                                builder: (context, state) {
-                                  final voteAverage = state.hasData ? state.movieDetails!.movie.rating : 0.0;
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                                    child: _Section(
-                                      header: 'Popularity',
-                                      horizontalAlignment: CrossAxisAlignment.center,
-                                      child: Text('$voteAverage'),
-                                    ),
-                                  );
-                                },
-                              ),
-                              if (widget.movie.hasGenres())
-                                _Section(
-                                  header: 'Genres',
-                                  horizontalAlignment: CrossAxisAlignment.center,
-                                  child: Text(widget.movie.getGenresAsString()),
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 8),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                BlocBuilder<MovieDetailsCubit, MovieDetailsState>(
+                                  builder: (context, state) {
+                                    final status = state.hasData ? state.movieDetails!.status : 'Loading...';
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                                      child: _Section(
+                                        header: 'Status',
+                                        horizontalAlignment: CrossAxisAlignment.center,
+                                        child: Text(status),
+                                      ),
+                                    );
+                                  },
                                 ),
-                            ],
+                                BlocBuilder<MovieDetailsCubit, MovieDetailsState>(
+                                  builder: (context, state) {
+                                    final voteAverage = state.hasData ? state.movieDetails!.movie.rating : 0.0;
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                                      child: _Section(
+                                        header: 'Popularity',
+                                        horizontalAlignment: CrossAxisAlignment.center,
+                                        child: Text('$voteAverage'),
+                                      ),
+                                    );
+                                  },
+                                ),
+                                BlocBuilder<MovieDetailsCubit, MovieDetailsState>(
+                                  builder: (context, state) {
+                                    String genres = state.hasData ?
+                                    state.movieDetails!.movie.getGenresAsString() : 'Loading...';
+
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                                      child: _Section(
+                                        header: 'Genres',
+                                        horizontalAlignment: CrossAxisAlignment.center,
+                                        child: Text(genres),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        _Section(
-                          header: 'Overview',
-                          child: Text(widget.movie.overview),
-                        ),
-                        BlocBuilder<MovieDetailsCubit, MovieDetailsState>(
-                          builder: (context, state) {
-                            if (!state.hasData || !state.hasCompanies)
-                              return SizedBox.shrink();
-                            return _CompaniesSection(state.movieDetails!.companies);
-                          },
-                        )
-                      ],
-                    ),
-                  ],
+                          _Section(
+                            header: 'Overview',
+                            child: Text(widget.movie.overview),
+                          ),
+                          BlocBuilder<MovieDetailsCubit, MovieDetailsState>(
+                            builder: (context, state) {
+                              if (!state.hasData || !state.hasCompanies)
+                                return SizedBox.shrink();
+                              return _CompaniesSection(state.movieDetails!.companies);
+                            },
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          Positioned(
-            top: imageHeight * .98,
-            right: 16,
-            child: BlocBuilder<MovieDetailsCubit, MovieDetailsState>(
-              builder: (context, state) {
-                if (!state.hasData)
-                  return SizedBox.shrink();
+            Positioned(
+              top: imageHeight * .98,
+              right: 16,
+              child: BlocBuilder<MovieDetailsCubit, MovieDetailsState>(
+                builder: (context, state) {
+                  if (!state.hasData)
+                    return SizedBox.shrink();
 
-                return GestureDetector(
-                  onTap: () {
-                    final updatedMovie = context.read<FavoriteMoviesCubit>()
-                        .changeFavoriteStatus(state.movieDetails!.movie);
-                    context.read<MovieDetailsCubit>().updateMovieState(updatedMovie);
-                  },
-                    child: MenuButton(state.movieDetails!.movie));
-              },
-            ),
-          )
-        ],
+                  return GestureDetector(
+                    onTap: () {
+                      final updatedMovie = context.read<FavoriteMoviesCubit>()
+                          .changeFavoriteStatus(state.movieDetails!.movie);
+                      context.read<MovieDetailsCubit>().updateMovieState(updatedMovie);
+                    },
+                      child: MenuButton(state.movieDetails!.movie));
+                },
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

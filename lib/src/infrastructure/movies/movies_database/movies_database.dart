@@ -26,32 +26,14 @@ class MoviesDatabase extends _$MoviesDatabase {
         .watch();
   }
 
-  Future<List<MovieDatabaseObject>?> getAllMovies() {
-    return select(movieTable).get();
-  }
-
-  Future<MovieDatabaseObject?> getMovieById(String id) async {
-    await (select(movieTable)
-      ..where((tbl) => tbl.id.equals(id)))
-        .getSingleOrNull();
-  }
-
-  Future<void> insertMovie(MovieDatabaseObject object) async {
-    await into(movieTable).insert(object, mode: InsertMode.insertOrReplace);
+  Future<MovieDatabaseObject?> getMovieById(String id) {
+    return (select(movieTable)..where((t) => t.id.equals(id))).getSingleOrNull();
   }
 
   Future<void> insertOrUpdate(MovieDatabaseObject object) async {
     await into(movieTable).insertOnConflictUpdate(object);
   }
-
-  Future<void> insertAll(List<MovieDatabaseObject> objects) async {
-    for (int i = 0; i < objects.length; i++) {
-      await insertMovie(objects[i]);
-    }
-  }
 }
-
-
 
 LazyDatabase _openConnection() {
   return LazyDatabase(() async {

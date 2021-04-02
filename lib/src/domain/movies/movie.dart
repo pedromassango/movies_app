@@ -61,7 +61,11 @@ class Movie {
   /// Simplifying the access to
   /// display genres as a single string.
   String getGenresAsString() {
-    return genresAsString ?? _getMinimumGenres().join(' / ');
+    if (genresAsString != null && genresAsString!.isNotEmpty)
+      return genresAsString!;
+    if (_getMinimumGenres().isEmpty)
+      return 'N/A';
+    return _getMinimumGenres().join(' / ');
   }
 
   List<Genre> _getMinimumGenres() {

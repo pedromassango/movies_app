@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movies/src/application/movies/favorite_movies/favorite_movies_cubit.dart';
-import 'package:movies/src/application/movies/movie_details_cubit.dart';
 import 'package:movies/src/application/movies/movie_search_cubit.dart';
-import 'package:movies/src/application/movies/movies_cubit.dart';
 import 'package:movies/src/dependency_injection/dependency_injection.dart';
 import 'package:movies/src/domain/movies/movies_repository.dart';
 import 'package:movies/src/presentation/home_page/tabs/movies_tab/movies_tab.dart';
