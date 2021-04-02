@@ -52,7 +52,7 @@ class MoviesRepositoryBase extends MoviesRepository {
     final response = await moviesService.getMovieDetails(movieId: movieId);
 
     if (response.item1 != null) {
-      final isFavorite = await _isFavoriteMovie(response.item1!.id.toString());
+      final isFavorite = await _isFavoriteMovie(movieId);
 
       final data = movieDetailsResponseItemConverter(
         response.item1!,
