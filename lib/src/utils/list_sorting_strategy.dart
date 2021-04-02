@@ -8,8 +8,8 @@ class SortingStrategy {
   static int sortStringInAscendingOrder(String a, String b) => a.compareTo(b);
   static int sortStringInDescendingOrder(String a, String b) => b.compareTo(a);
 
-  static int sortDateInAscendingOrder(DateTime a, DateTime b) => a.compareTo(b);
-  static int sortDateInDescendingOrder(DateTime a, DateTime b) => b.compareTo(a);
+  static int sortDateInAscendingOrder(DateTime a, DateTime b) => b.compareTo(a);
+  static int sortDateInDescendingOrder(DateTime a, DateTime b) => a.compareTo(b);
 }
 
 class MovieListSortStrategy {
