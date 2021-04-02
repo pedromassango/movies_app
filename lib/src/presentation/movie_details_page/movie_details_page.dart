@@ -17,6 +17,21 @@ class MovieDetailsPage extends StatefulWidget {
 
 class _MovieDetailsPageState extends State<MovieDetailsPage> {
 
+  void _changeFavoriteStatus(BuildContext context, Movie movie) {
+    final updatedMovie = context.read<FavoriteMoviesCubit>()
+        .changeFavoriteStatus(movie);
+    context.read<MovieDetailsCubit>().updateMovieState(updatedMovie);
+
+    final message = updatedMovie.isFavorite
+        ? 'Movie added to favorites'
+        : 'Movie removed from favorites';
+
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      backgroundColor: Colors.white,
+        content: Text(message, style: TextStyle(color: Colors.black),)),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -174,11 +189,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                     return SizedBox.shrink();
 
                   return GestureDetector(
-                    onTap: () {
-                      final updatedMovie = context.read<FavoriteMoviesCubit>()
-                          .changeFavoriteStatus(state.movieDetails!.movie);
-                      context.read<MovieDetailsCubit>().updateMovieState(updatedMovie);
-                    },
+                    onTap: () => _changeFavoriteStatus(context, state.movieDetails!.movie),
                       child: MenuButton(state.movieDetails!.movie));
                 },
               ),
