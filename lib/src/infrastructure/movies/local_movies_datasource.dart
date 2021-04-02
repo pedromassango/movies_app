@@ -9,14 +9,6 @@ class MoviesLocalDatasource {
 
   MoviesLocalDatasource(this.database);
 
-  Future<List<Movie>> getAllMovies() async {
-    final data = await database.getAllMovies();
-    if (data == null) {
-      return [];
-    }
-    return data.map<Movie>(_movieDatabaseObjectConverter).toList();
-  }
-
   Stream<List<Movie>> watchFavoriteMovies() {
     return database.watchFavoriteMovies()
     .map<List<Movie>>((event) => event.map(_movieDatabaseObjectConverter)
