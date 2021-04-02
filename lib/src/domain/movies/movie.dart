@@ -9,8 +9,10 @@ class Movie {
   final String posterImageUrl;
   final String backdropImageUrl;
   final List<Genre> genres;
-  final int rating;
+  final double rating;
   final DateTime? releaseDate;
+  final String? genresAsString;
+  final bool isFavorite;
 
   Movie({
     required this.id,
@@ -21,7 +23,24 @@ class Movie {
     required this.genres,
     required this.rating,
     required this.releaseDate,
+    required this.isFavorite,
+    this.genresAsString
   });
+
+  Movie copyWith({bool? isFavorite}) {
+    return Movie(
+      id: id,
+      title: title,
+      overview: overview,
+      posterImageUrl: posterImageUrl,
+      backdropImageUrl: backdropImageUrl,
+      genres: genres,
+      rating: rating,
+      releaseDate: releaseDate,
+      isFavorite: isFavorite ?? this.isFavorite,
+      genresAsString: genresAsString,
+    );
+  }
 
   /// Hack to provide a "reliable" (non-nullable)
   /// date to the comparator function because some Movies just does not give
@@ -37,9 +56,19 @@ class Movie {
     return DateFormat.yMMMMd().format(releaseDate!);
   }
 
-  bool hasGenres() => genres.isNotEmpty;
+  bool hasGenres() => genres.isNotEmpty || genresAsString != null;
 
-  List<Genre> getMinimumGenres() {
+  /// Simplifying the access to
+  /// display genres as a single string.
+  String getGenresAsString() {
+    if (genresAsString != null && genresAsString!.isNotEmpty)
+      return genresAsString!;
+    if (_getMinimumGenres().isEmpty)
+      return 'N/A';
+    return _getMinimumGenres().join(' / ');
+  }
+
+  List<Genre> _getMinimumGenres() {
     late final List<Genre> _genres;
     if (this.genres.length > 2) {
       _genres = genres.sublist(0, 2);
@@ -59,7 +88,9 @@ class Movie {
           posterImageUrl == other.posterImageUrl &&
           backdropImageUrl == other.backdropImageUrl &&
           genres == other.genres &&
+          genresAsString == other.genresAsString &&
           releaseDate == other.releaseDate &&
+          isFavorite == other.isFavorite &&
           overview == other.overview &&
           rating == other.rating;
 
@@ -71,6 +102,8 @@ class Movie {
       backdropImageUrl.hashCode^
       genres.hashCode^
       releaseDate.hashCode^
+      isFavorite.hashCode^
+      genresAsString.hashCode^
       overview.hashCode^
       rating.hashCode;
 }

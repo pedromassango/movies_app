@@ -24,6 +24,27 @@ class MovieDetailsCubit extends Cubit<MovieDetailsState> {
     ));
   }
 
+  void updateMovieState(Movie movie) {
+    if (state.hasError) {
+      return;
+    }
+
+    emit(state.copyWith(
+      movieDetails: state.movieDetails!.copyWith(
+        movie: movie,
+      )
+    ));
+  }
+
+  /// Since this is a global state object and this state
+  /// persists when we navigate back from details page,
+  /// this method is useful to clear the current movie's
+  /// information right before navigating back from the
+  /// movie details page.
+  void resetState() {
+    emit(MovieDetailsState.initialState());
+  }
+
 }
 
 class MovieDetailsState {

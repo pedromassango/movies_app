@@ -17,10 +17,16 @@ dependencies:
   tuple: ^2.0.0
   intl:
   rxdart: ^0.26.0
+  moor:
+  sqlite3_flutter_libs:
+  path_provider:
+  path:
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  moor_generator:
+  build_runner:
 
 flutter:
   uses-material-design: true

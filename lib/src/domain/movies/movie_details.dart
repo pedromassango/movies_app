@@ -1,57 +1,43 @@
+import 'movie.dart';
 
 class MovieDetails {
-  final String id;
+  final Movie movie;
   final bool video;
-  final String title;
-  final String overview;
-  final double voteAverage;
-  final String backdropImageUrl;
-  final DateTime? releaseDate;
-  final bool isFavorite;
   final String status;
   final List<ProductionCompany> companies;
 
   MovieDetails({
-    required this.id,
     required this.video,
-    required this.title,
-    required this.overview,
-    required this.voteAverage,
-    required this.backdropImageUrl,
-    required this.releaseDate,
-    required this.isFavorite,
     required this.status,
     required this.companies,
+    required this.movie,
   });
+
+  MovieDetails copyWith({Movie? movie}) {
+    return MovieDetails(
+      video: video,
+      status: status,
+      companies: companies,
+      movie: movie ?? this.movie,
+    );
+  }
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is MovieDetails &&
           runtimeType == other.runtimeType &&
-          id == other.id &&
           video == other.video &&
-          title == other.title &&
-          overview == other.overview &&
-          voteAverage == other.voteAverage &&
-          backdropImageUrl == other.backdropImageUrl &&
-          isFavorite == other.isFavorite &&
+          movie == other.movie &&
           status == other.status &&
-          companies == other.companies &&
-          releaseDate == other.releaseDate;
+          companies == other.companies;
 
   @override
   int get hashCode =>
-      id.hashCode ^
       video.hashCode ^
-      title.hashCode ^
-      overview.hashCode ^
-      voteAverage.hashCode ^
+      movie.hashCode ^
       status.hashCode ^
-      isFavorite.hashCode ^
-      companies.hashCode ^
-      backdropImageUrl.hashCode ^
-      releaseDate.hashCode;
+      companies.hashCode;
 }
 
 class ProductionCompany {
