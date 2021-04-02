@@ -44,7 +44,7 @@ MovieDetails movieDetailsResponseItemConverter(MovieDetailsResponse movieDetails
       posterImageUrl: IMAGE_URL + (movieDetailsResponse.posterPath ?? ''),
       isFavorite: isFavorite,
       rating: movieDetailsResponse.voteAverage ?? 0.0,
-      genres: [], // TODO: provide genres
+      genres:  getGenresBy(movieDetailsResponse.genreIds),
     ),
     status: movieDetailsResponse.status ?? 'N/A',
     video: movieDetailsResponse.video,

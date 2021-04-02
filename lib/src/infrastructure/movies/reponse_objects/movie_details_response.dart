@@ -2,8 +2,6 @@ import 'dart:convert';
 
 MovieDetailsResponse movieDetailsResponseFromJson(String str) => MovieDetailsResponse.fromJson(json.decode(str));
 
-String movieDetailsResponseToJson(MovieDetailsResponse data) => json.encode(data.toJson());
-
 class MovieDetailsResponse {
   MovieDetailsResponse({
     required this.adult,
@@ -22,13 +20,13 @@ class MovieDetailsResponse {
     this.releaseDate,
     this.revenue,
     this.runtime,
-    this.spokenLanguages,
     this.status,
     this.tagline,
     this.title,
     required this.video,
     this.voteAverage,
     this.voteCount,
+    required this.genreIds,
   });
 
   final bool adult;
@@ -37,6 +35,7 @@ class MovieDetailsResponse {
   final int budget;
   final String homepage;
   final int id;
+  final List<int> genreIds;
   final String imdbId;
   final String originalLanguage;
   final String? originalTitle;
@@ -47,7 +46,6 @@ class MovieDetailsResponse {
   final DateTime? releaseDate;
   final int? revenue;
   final int? runtime;
-  final List<SpokenLanguage>? spokenLanguages;
   final String? status;
   final String? tagline;
   final String? title;
@@ -62,6 +60,7 @@ class MovieDetailsResponse {
     budget: json["budget"],
     homepage: json["homepage"],
     id: json["id"],
+    genreIds: json["genres"] == null ? [] : List<int>.from(json["genres"].map((x) => x['id'])),
     imdbId: json["imdb_id"],
     originalLanguage: json["original_language"],
     originalTitle: json["original_title"],
@@ -72,7 +71,6 @@ class MovieDetailsResponse {
     releaseDate: DateTime.parse(json["release_date"]),
     revenue: json["revenue"],
     runtime: json["runtime"],
-    spokenLanguages: List<SpokenLanguage>.from(json["spoken_languages"].map((x) => SpokenLanguage.fromJson(x))),
     status: json["status"],
     tagline: json["tagline"],
     title: json["title"],
@@ -80,30 +78,6 @@ class MovieDetailsResponse {
     voteAverage: json["vote_average"].toDouble(),
     voteCount: json["vote_count"],
   );
-
-  Map<String, dynamic> toJson() => {
-    "adult": adult,
-    "backdrop_path": backdropPath,
-    "belongs_to_collection": belongsToCollection,
-    "budget": budget,
-    "homepage": homepage,
-    "id": id,
-    "imdb_id": imdbId,
-    "original_language": originalLanguage,
-    "original_title": originalTitle,
-    "overview": overview,
-    "popularity": popularity,
-    "poster_path": posterPath,
-    "production_companies": List<dynamic>.from(productionCompanies.map((x) => x.toJson())),
-    "revenue": revenue,
-    "runtime": runtime,
-    "status": status,
-    "tagline": tagline,
-    "title": title,
-    "video": video,
-    "vote_average": voteAverage,
-    "vote_count": voteCount,
-  };
 }
 
 class _ProductionCompany {
@@ -126,30 +100,4 @@ class _ProductionCompany {
     originCountry: json["origin_country"],
   );
 
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "logo_path": logoPath == null ? null : logoPath,
-    "name": name,
-    "origin_country": originCountry,
-  };
-}
-
-class SpokenLanguage {
-  SpokenLanguage({
-    this.iso6391,
-    required this.name,
-  });
-
-  String? iso6391;
-  final String name;
-
-  factory SpokenLanguage.fromJson(Map<String, dynamic> json) => SpokenLanguage(
-    iso6391: json["iso_639_1"],
-    name: json["name"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "iso_639_1": iso6391,
-    "name": name,
-  };
 }
