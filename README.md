@@ -12,6 +12,8 @@ A movie app challenge. The data comes from The Movie Database.
 1. All the requirements are met.
 2. It is possible to remove items from favorites by swiping from
    right-to-left in the favorites tab.
+3. It is possible to open the action menu in movie details page
+   by scrolling the content. Note: Animation is not perfect yet.
 3. I've done so many things to demonstrate the DDD architecture
    since the time is limited, I was not able to meet all the requirements.
 

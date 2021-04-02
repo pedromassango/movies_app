@@ -17,14 +17,18 @@ class MovieDetailsPage extends StatefulWidget {
 
 class _MovieDetailsPageState extends State<MovieDetailsPage> {
 
+  late final ScrollController _controller = ScrollController();
+  double offset = 0;
+  bool animateButton = false;
+
   void _changeFavoriteStatus(BuildContext context, Movie movie) {
     final updatedMovie = context.read<FavoriteMoviesCubit>()
         .changeFavoriteStatus(movie);
     context.read<MovieDetailsCubit>().updateMovieState(updatedMovie);
 
     final message = updatedMovie.isFavorite
-        ? 'Movie added to favorites'
-        : 'Movie removed from favorites';
+        ? 'Movie added to favorites!'
+        : 'Movie removed from favorites!';
 
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       backgroundColor: Colors.white,
@@ -33,9 +37,24 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     super.initState();
     context.read<MovieDetailsCubit>().loadMovieDetails(widget.movie);
+
+    _controller.addListener(() {
+      setState(() {
+        if (_controller.offset <= 0) {
+          offset = _controller.offset;
+          print(offset);
+        }
+      });
+    });
   }
 
   @override
@@ -46,6 +65,16 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
       headline6: TextStyle(color: Colors.white)
     );
     final bgColor = Theme.of(context).scaffoldBackgroundColor;
+
+    // Scroll animation handling
+    // here we calculate how much offset the user should scroll to
+    // open the menu automatically.
+    if (offset <= -30 && !animateButton) {
+      animateButton = true;
+    }
+
+    double menuPositionTop = imageHeight * .96;
+    double menuPositionRight = 16.0;
 
     return WillPopScope(
       onWillPop: () async {
@@ -91,6 +120,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                 child: SizedBox(
                   height: imageHeight * .8,
                   child: ListView(
+                    controller: _controller,
                     padding: EdgeInsets.only(bottom: 32),
                     physics: BouncingScrollPhysics(),
                     children: [
@@ -180,17 +210,76 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                 ),
               ),
             ),
-            Positioned(
-              top: imageHeight * .98,
-              right: 16,
+            TweenAnimationBuilder<Size>(
+              duration: kThemeAnimationDuration,
+              curve: Curves.elasticInOut,
+              tween: Tween<Size>(
+                begin: Size(0, 200),
+                end: animateButton ? Size(80, menuPositionTop - 64) :
+                Size(24 - ((offset * .8)), menuPositionTop),
+              ),
+              child: GestureDetector(
+                onTap: () => setState(() => animateButton = !animateButton),
+                  child: MenuButton(Icons.share)),
+              builder: (_, value, child) {
+                return Positioned(
+                  top: value.height,
+                  right: value.width,
+                  child: child!,
+                );
+              },
+            ),
+            TweenAnimationBuilder<Size>(
+              duration: kThemeAnimationDuration,
+              curve: Curves.elasticInOut,
+              tween: Tween<Size>(
+                begin: Size(10, 150),
+                end: animateButton ? Size(118, menuPositionTop - 15) :
+                Size(24 - ((offset * .7)), menuPositionTop + (offset - offset * .8)),
+              ),
+              child: GestureDetector(
+                onTap: () => setState(() => animateButton = !animateButton),
+                  child: MenuButton(Icons.play_arrow_sharp)),
+              builder: (_, value, child) {
+                return Positioned(
+                  top: value.height,
+                  right: value.width,
+                  child: child!,
+                );
+              },
+            ),
+            AnimatedPositioned(
+              duration: kThemeAnimationDuration,
+              top: animateButton ? (menuPositionTop * .78) : menuPositionTop + (offset - offset * .8),
+              right: 24,
+              curve: Curves.elasticInOut,
               child: BlocBuilder<MovieDetailsCubit, MovieDetailsState>(
                 builder: (context, state) {
                   if (!state.hasData)
                     return SizedBox.shrink();
 
+                  bool isFavorite = state.movieDetails!.movie.isFavorite;
                   return GestureDetector(
-                    onTap: () => _changeFavoriteStatus(context, state.movieDetails!.movie),
-                      child: MenuButton(state.movieDetails!.movie));
+                    onTap: () {
+                      setState(() => animateButton = !animateButton);
+                      _changeFavoriteStatus(context, state.movieDetails!.movie);
+                    },
+                      child: MenuButton(isFavorite ? Icons.star : Icons.star_border_sharp));
+                },
+              ),
+            ),
+            Positioned(
+              top: menuPositionTop,
+              right: menuPositionRight,
+              child: BlocBuilder<MovieDetailsCubit, MovieDetailsState>(
+                builder: (context, state) {
+                  return AnimatedOpacity(
+                    opacity: state.hasData ? 1 : 0,
+                    duration: Duration(milliseconds: 300),
+                    child: GestureDetector(
+                      onTap: () => setState(() => animateButton = !animateButton),
+                        child: MenuButton(animateButton? Icons.close : Icons.more_horiz, true)),
+                  );
                 },
               ),
             )
@@ -202,21 +291,31 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
 }
 
 class MenuButton extends StatelessWidget {
-  final Movie movie;
+  final IconData iconData;
+  final bool largeSize;
 
-  const MenuButton(this.movie);
+  const MenuButton(this.iconData, [this.largeSize = false]);
 
   @override
   Widget build(BuildContext context) {
-    final icon = movie.isFavorite ? Icons.star : Icons.star_border_sharp;
-    return Container(
-      width: 50,
-      height: 50,
+    final double size = largeSize ? 54 : 42;
+    return AnimatedContainer(
+      width: size,
+      height: size,
+      duration: Duration(milliseconds: 100),
       decoration: BoxDecoration(
         color: Colors.white,
         shape: BoxShape.circle,
+        boxShadow: [
+          if(largeSize)
+            BoxShadow(
+            color: Colors.white12,
+            spreadRadius: 8,
+            blurRadius: 16
+          )
+        ]
       ),
-      child: Icon(icon, color: Theme.of(context).scaffoldBackgroundColor,
+      child: Icon(iconData, color: Theme.of(context).scaffoldBackgroundColor,
       ),
     );
   }
