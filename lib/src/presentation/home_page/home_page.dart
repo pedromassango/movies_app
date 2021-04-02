@@ -5,7 +5,7 @@ import 'package:movies/src/domain/movies/movies_repository.dart';
 import 'package:movies/src/presentation/home_page/tabs/movies_tab/movies_tab.dart';
 
 import 'tabs/favorites_tab/favorites_tab.dart';
-import 'tabs/movies_tab/movie_search_delegate.dart';
+import 'movie_search_delegate.dart';
 
 class HomePage extends StatefulWidget {
 

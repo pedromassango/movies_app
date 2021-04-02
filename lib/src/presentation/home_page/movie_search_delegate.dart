@@ -74,9 +74,8 @@ class MovieSearchDelegate extends SearchDelegate {
                 final movie = state.movies[index];
                 return GestureDetector(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(
-                        builder: (_) => MovieDetailsPage(movie: movie)
-                    ));
+                    Navigator.push(context,
+                        _FadePageTransition(MovieDetailsPage(movie: movie)));
                   },
                     child: MovieListItem(movie));
               },
@@ -98,5 +97,19 @@ class MovieSearchDelegate extends SearchDelegate {
     );
     return themData;
   }
+
+}
+
+/// Custom page transition while navigating to movie details page.
+class _FadePageTransition extends PageRouteBuilder {
+  _FadePageTransition(Widget page) : super(
+    pageBuilder: (context, animation, secondaryAnimation) => page,
+    transitionsBuilder: (context, animation, secondaryAnimation, page) {
+      return FadeTransition(
+        opacity: animation,
+        child: page,
+      );
+    }
+  );
 
 }
