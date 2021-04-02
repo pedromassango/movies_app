@@ -34,7 +34,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
 
     return WillPopScope(
       onWillPop: () async {
-        context.read<MovieDetailsCubit>().close();
+        context.read<MovieDetailsCubit>().resetState();
         return true;
       },
       child: Scaffold(

@@ -36,6 +36,15 @@ class MovieDetailsCubit extends Cubit<MovieDetailsState> {
     ));
   }
 
+  /// Since this is a global state object and this state
+  /// persists when we navigate back from details page,
+  /// this method is useful to clear the current movie's
+  /// information right before navigating back from the
+  /// movie details page.
+  void resetState() {
+    emit(MovieDetailsState.initialState());
+  }
+
 }
 
 class MovieDetailsState {
