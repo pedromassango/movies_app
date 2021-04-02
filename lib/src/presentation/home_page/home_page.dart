@@ -22,6 +22,17 @@ class _HomePageState extends State<HomePage> {
     return getIt.get<MoviesRepository>();
   }
 
+  void _showSearchPage(BuildContext context) {
+    showSearch(
+      context: context,
+      delegate: MovieSearchDelegate(
+          movieSearchBloc: MovieSearchBloc(
+              moviesRepository: getMoviesRepository()
+          )
+      ),
+    );
+  }
+
   @override
   void dispose() {
     _pageController.dispose();
@@ -34,24 +45,15 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
-        title: Text('Movies', style: TextStyle(
-          fontSize: 32,
-        ),),
+        title: Text('Movies',
+          style: TextStyle(fontSize: 32),
+        ),
         actions: [
           Builder(
             builder: (context) {
               return IconButton(
                   icon: Icon(Icons.search_sharp),
-                  onPressed: () {
-                    showSearch(
-                        context: context,
-                        delegate: MovieSearchDelegate(
-                          movieSearchBloc: MovieSearchBloc(
-                            moviesRepository: getMoviesRepository()
-                          )
-                        ),
-                    );
-                  },
+                  onPressed: () => _showSearchPage(context),
               );
             },
           )
@@ -74,6 +76,10 @@ class _HomePageState extends State<HomePage> {
         showSelectedLabels: false,
         showUnselectedLabels: false,
         currentIndex: _currentTabIndex,
+        unselectedItemColor: Colors.white38,
+        selectedItemColor: Colors.white,
+        iconSize: 28,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         onTap: (index) {
           setState(() => _currentTabIndex = index);
           _pageController.jumpToPage(index);
